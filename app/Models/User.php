@@ -1,72 +1,27 @@
 <?php
 namespace App\Models;
 
+
 use Base\Db;
+use Illuminate\Database\Eloquent\Model;
 use Swift_SmtpTransport;
 use Swift_Mailer;
 use Swift_Message;
 
-class User
+class User extends Model
 {
-    private $id;
-    private $name;
-    private $password;
-    private $email;
+    protected $table = 'users';
+    protected $fillable = ['name', 'email', 'password'];
 
-    public function __construct(array $data)
+    public $timestamps = false;
+
+    public function posts()
     {
-        $this->name = $data['name'];
-        $this->password = $data['password'];
-        $this->email = $data['email'];
+        return $this->hasMany(Post::class, 'author_id');
     }
 
-    public static function getByEmail(string $email)
+    public function sendRegistrationEmail()
     {
-        $db = Db::getInstance();
-        $data = $db->fetchOne("SELECT * FROM users WHERE email = :email", [':email' => $email]);
-        if (!$data) {
-            return null;
-        }
-
-        $user = new self($data);
-        $user->id = $data['id'];
-        return $user;
-    }
-
-    public static function getByIds(array $userIds)
-    {
-        $db = Db::getInstance();
-        $idsString = implode(',', $userIds);
-        $data = $db->fetchAll("SELECT * FROM users WHERE id IN($idsString)");
-        if (!$data) {
-            return [];
-        }
-
-        $users = [];
-        foreach ($data as $elem) {
-            $user = new self($elem);
-            $user->id = $elem['id'];
-            $users[$user->id] = $user;
-        }
-
-        return $users;
-    }
-
-    public function addUser()
-    {
-        $db = Db::getInstance();
-        $res = $db->execQuery("INSERT INTO users (name, password, email) 
-            VALUES (:name, :password, :email)",
-            [
-                ':name' => $this->name,
-                ':password' => self::getPasswordHash($this->password),
-                'email' => $this->email,
-            ]
-        );
-        $this->id = $db->lastInsertedId();
-
-        //Create the email about successful registration
-        if ($res == true) {
             try {
                 $transport = (new Swift_SmtpTransport(SMTP_HOST, SMTP_PORT, 'ssl'))
                     ->setUsername(SMTP_USER)
@@ -81,22 +36,6 @@ class User
                 echo print_r($e->getMessage());
                 echo print_r($e->getTrace(), 1);
             }
-        }
-
-        return $res;
-    }
-
-    public static function getById(int $id): ?self
-    {
-        $db = Db::getInstance();
-        $data = $db->fetchOne("SELECT * FROM users WHERE id = :id", [':id' => $id]);
-        if (!$data) {
-            return null;
-        }
-        $user = new self($data);
-        $user->id = $id;
-
-        return $user;
     }
 
     public static function getPasswordHash(string $password)
@@ -135,8 +74,6 @@ class User
     {
         return in_array($this->id, ADMIN_IDS);
     }
-
-
 
 
 }

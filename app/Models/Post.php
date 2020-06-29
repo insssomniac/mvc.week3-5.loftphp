@@ -1,122 +1,34 @@
 <?php
 namespace App\Models;
 
-use Base\Db;
+//use Base\Db;
 use Intervention\Image\ImageManagerStatic as IImage;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Capsule\Manager as DB;
 
-class Post
+class Post extends Model
 {
-    private $id;
-    private $title;
-    private $text;
-    private $createdAt;
-    private $authorId;
+    protected $table = 'posts';
+    protected $fillable = ['title', 'text', 'image'];
 
-    /** @var User */
-    private $author;
-    private $image;
+    public $timestamps = false;
 
-    public function __construct(array $data)
+    public function author()
     {
-        $this->title = $data['title'];
-        $this->text = $data['text'];
-        $this->authorId = $data['author_id'];
-        $this->image = $data['image'] ?? '';
-        $this->createdAt = $data['created_at'] ?? '';
-    }
-
-    public function createPost()
-    {
-        $db = Db::getInstance();
-        $res = $db->execQuery("INSERT INTO posts (title, text, author_id, image) 
-            VALUES (:title, :text, :author_id, :image)",
-            [':title' => $this->title, ':text' => $this->text, ':author_id' => $this->authorId, ':image' => $this->image]);
-
-        return $res;
-    }
-
-    public static function getList(int $limit = 20): array
-    {
-        $db = Db::getInstance();
-        $data = $db->fetchAll("SELECT * FROM posts LIMIT $limit");
-        if (!$data){
-            return [];
-        }
-
-        $posts = [];
-        foreach ($data as $elem) {
-            $post = new self($elem);
-            $post->id = $elem['id'];
-            $posts[] = $post;
-        }
-
-        return $posts;
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     public static function getUserPosts(int $userId, int $limit = 20): array
     {
-        $db = Db::getInstance();
-        $data = $db->fetchAll("SELECT * FROM posts WHERE author_id = $userId LIMIT $limit");
+        $data = Post::where('author_id', '=', $userId)->take($limit)->get();
         if (!$data) {
             return [];
         }
-
         $posts = [];
-        foreach ($data as $elem) {
-            $post = new self($elem);
-            $post->id = $elem['id'];
+        foreach ($data as $post) {
             $posts[] = $post;
         }
-
         return $posts;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuthorId()
-    {
-        return $this->authorId;
-    }
-
-    /**
-     * @return User
-     */
-    public function getAuthor(): User
-    {
-        return $this->author;
     }
 
     /**
@@ -177,12 +89,12 @@ class Post
 
     public static function deletePost(int $postId)
     {
-        $db = Db::getInstance();
-        $pic = $db->fetchOne("SELECT image FROM posts WHERE id = :postId", [':postId' => $postId]);
-        $query = "DELETE FROM posts WHERE id = $postId";
-        $ret = $db->execQuery($query);
-        if ($ret == true && $pic['image']) {
-            $imgPath = 'images/' . $pic['image'];
+        $picQuery = DB::select('SELECT image FROM posts WHERE id = ?', [$postId]);
+        $pic = $picQuery[0]->image;
+        $ret = DB::table('posts')->where('id', $postId)->delete();
+
+        if ($ret == true && $pic) {
+            $imgPath = 'images/' . $pic;
             if (file_exists($imgPath)) {
                 unlink($imgPath);
                 return $ret;

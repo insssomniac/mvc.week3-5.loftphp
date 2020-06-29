@@ -27,21 +27,9 @@ abstract class Controller
             return null;
         }
 
-        $user = User::getById($userId);
-        if (!$user) {
-            return null;
-        }
+        $user = User::find($userId);
 
         return $user;
-    }
-
-    public function getUserId()
-    {
-        if ($user = $this->getUser()) {
-            return $user->getId();
-        }
-
-        return false;
     }
 
     public function redirect(string $url)

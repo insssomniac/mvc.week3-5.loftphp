@@ -11,21 +11,9 @@ class Blog extends Controller
         if (!$this->getUser()) {
             $this->redirect('/login');
         }
-        $posts = Post::getList();
 
-        if ($posts) {
-            $userIds = array_map(function (Post $post) {
-                return $post->getAuthorId();
-            }, $posts);
+        $posts = Post::all()->take(20);
 
-            $users = \App\Models\User::getByIds($userIds);
-            array_walk($posts, function (Post $post) use ($users) {
-                if (isset($users[$post->getAuthorId()])) {
-                    $post->setAuthor($users[$post->getAuthorId()]);
-                }
-            });
-        }
-//        return $this->view->render('blog.phtml', ['posts' => $posts, 'user' => $this->getUser()]);
         return $this->view->renderTwig('blog.html', ['posts' => $posts, 'user' => $this->getUser()]);
     }
 
@@ -45,17 +33,16 @@ class Blog extends Controller
             $this->error('Поле Заголовок обязательно для заполнения');
         }
 
-        $post = new Post([
-            'title' => $title,
-            'text' => $text,
-            'author_id' => $this->getUserId(),
-        ]);
+        $post = new Post;
+        $post->title = $title;
+        $post->text = $text;
+        $post->author_id = $this->session->getUserId();
 
         if (isset($_FILES ['image']['tmp_name'])) {
             $post->loadFile($_FILES['image']['tmp_name']);
         }
 
-        $post->createPost();
+        $post->save();
         $this->redirect('/blog');
     }
 

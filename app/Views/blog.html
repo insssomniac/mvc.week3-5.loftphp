@@ -28,27 +28,23 @@
             <ul class="posts">
                 {% for post in posts %}
                 <li class="posts__item">
-                    {% if post.getImage %}
+                    {% if post.image %}
                     <div class="posts__picture-wrap">
-                        <img class="post__img" src="/images/{{post.getImage}}">
+                        <img class="post__img" src="/images/{{post.image}}">
                     </div>
                     {% endif %}
                     <div class="posts__content">
                         <h2 class="posts__title">{{post.title}}</h2>
                         <div class="posts__author-date-container">
-                            {% set author = post.getAuthor %}
-                            {% if author %}
-                            <div class="posts__author">{{author.getName}}</div>
-                            {% else %}
-                            <div class="posts__author">Автор был удален за ненадобностью</div>
-                            {% endif %}
-                            <div class="posts__date">{{post.createdAt}}</div>
+                            {% set author = post.author %}
+                            <div class="posts__author">{{author.name}}</div>
+                            <div class="posts__date">{{post.created_at}}</div>
                         </div>
 
                         <div class="posts__text">
                             <p>{{post.text}}</p>
                         </div>
-                        {% if user.isAdmin == true %}
+                        {% if user.isAdmin() == true %}
                         <a href="/admin/deletePost/?id={{post.id}}" class="btn btn--regular btn--white">Удалить пост</a>
                         {% endif %}
                     </div>

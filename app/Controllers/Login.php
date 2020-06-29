@@ -35,13 +35,14 @@ class Login extends Controller
         $email = (string) $_POST['email'];
         $password = (string) $_POST['password'];
 
-        $user = User::getByEmail($email);
+        $user = User::where('email', '=', $email)->first();
+
         if (!$user) {
-            return 'Неправильный логин и пароль';
+            return 'Неправильный логин или пароль';
         }
 
-        if ($user->getPassword() !== User::getPasswordHash($password)) {
-            return 'Неправильный логин и пароль';
+        if ($user->password !== User::getPasswordHash($password)) {
+            return 'Неправильный логин или пароль';
         }
 
         $this->session->authUser($user->getId());
@@ -71,13 +72,12 @@ class Login extends Controller
             return 'Необходимо ввести пароль, содержащий более 5 символов';
         }
 
-        $userData = [
-            'name' => $name,
-            'password' => $password,
-            'email' => $email,
-        ];
-        $user= new User($userData);
-        $user->addUser();
+        $user = new User;
+        $user->name = $name;
+        $user->email = $email;
+        $user->password = $user::getPasswordHash($password);
+        $user->sendRegistrationEmail();
+        $user->save();
 
         $this->session->authUser($user->getId());
         $this->redirect('/blog');
