@@ -1,9 +1,8 @@
 <?php
 namespace App\Models;
 
-
-use Base\Db;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Capsule\Manager as DB;
 use Swift_SmtpTransport;
 use Swift_Mailer;
 use Swift_Message;
@@ -41,6 +40,30 @@ class User extends Model
     public static function getPasswordHash(string $password)
     {
         return sha1('fg#%^&hj' . $password);
+    }
+
+    public static function deletePosts($userId)
+    {
+        self::deletePictures($userId);
+        DB::table('posts')->where('author_id', $userId)->delete();
+    }
+
+    public static function deletePictures($userId)
+    {
+        $picQuery = DB::select('SELECT image FROM posts WHERE author_id = ?', [$userId]);
+
+        foreach ($picQuery as $pic) {
+            $imgPath = 'images/' . $pic->image;
+            if ($pic->image && file_exists($imgPath)) {
+                unlink($imgPath);
+            }
+        }
+    }
+
+    public static function deleteUser($userId)
+    {
+        self::deletePosts($userId);
+        DB::table('users')->where('id', $userId)->delete();
     }
 
     /**

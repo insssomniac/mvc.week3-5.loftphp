@@ -14,7 +14,14 @@
         <div class="container top-line__container">
             <header class="header">
                 <div class="header__col--align--right text-grey">
-                    Вы вошли как <b>{{user.name}}</b>&nbsp;&nbsp;::&nbsp;&nbsp;<a href="/logout">Выйти</a>
+                    <div class="header__menu-item">
+                        Вы вошли как&nbsp;<b>{{user.name}}</b>&nbsp;&nbsp;::&nbsp;&nbsp;<a href="/logout">Выйти</a>
+                    </div>
+                    {% if user.isAdmin() == true %}
+                    <div class="header__menu-item">
+                        <a href="/admin/users">Администрирование</a>
+                    </div>
+                    {% endif %}
                 </div>
             </header>
             <div class="top-line__title">

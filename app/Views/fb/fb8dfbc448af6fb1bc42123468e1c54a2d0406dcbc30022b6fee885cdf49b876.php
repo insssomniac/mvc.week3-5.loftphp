@@ -50,11 +50,23 @@ class __TwigTemplate_989502faf0b8a900276561fe4a5fe0c4c77e66222bf5e5a4a49972a95d4
         <div class=\"container top-line__container\">
             <header class=\"header\">
                 <div class=\"header__col--align--right text-grey\">
-                    Вы вошли как <b>";
-        // line 17
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["user"] ?? null), "name", [], "any", false, false, false, 17), "html", null, true);
+                    <div class=\"header__menu-item\">
+                        Вы вошли как&nbsp;<b>";
+        // line 18
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["user"] ?? null), "name", [], "any", false, false, false, 18), "html", null, true);
         echo "</b>&nbsp;&nbsp;::&nbsp;&nbsp;<a href=\"/logout\">Выйти</a>
-                </div>
+                    </div>
+                    ";
+        // line 20
+        if ((twig_get_attribute($this->env, $this->source, ($context["user"] ?? null), "isAdmin", [], "method", false, false, false, 20) == true)) {
+            // line 21
+            echo "                    <div class=\"header__menu-item\">
+                        <a href=\"/admin/users\">Администрирование</a>
+                    </div>
+                    ";
+        }
+        // line 25
+        echo "                </div>
             </header>
             <div class=\"top-line__title\">
                 <h1 class=\"main-title\">Yet Another Interesting Blog</h1>
@@ -66,75 +78,75 @@ class __TwigTemplate_989502faf0b8a900276561fe4a5fe0c4c77e66222bf5e5a4a49972a95d4
         <div class=\"container\">
             <ul class=\"posts\">
                 ";
-        // line 29
+        // line 36
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["posts"] ?? null));
         $context['_iterated'] = false;
         foreach ($context['_seq'] as $context["_key"] => $context["post"]) {
-            // line 30
+            // line 37
             echo "                <li class=\"posts__item\">
                     ";
-            // line 31
-            if (twig_get_attribute($this->env, $this->source, $context["post"], "image", [], "any", false, false, false, 31)) {
-                // line 32
+            // line 38
+            if (twig_get_attribute($this->env, $this->source, $context["post"], "image", [], "any", false, false, false, 38)) {
+                // line 39
                 echo "                    <div class=\"posts__picture-wrap\">
                         <img class=\"post__img\" src=\"/images/";
-                // line 33
-                echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "image", [], "any", false, false, false, 33), "html", null, true);
+                // line 40
+                echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "image", [], "any", false, false, false, 40), "html", null, true);
                 echo "\">
                     </div>
                     ";
             }
-            // line 36
+            // line 43
             echo "                    <div class=\"posts__content\">
                         <h2 class=\"posts__title\">";
-            // line 37
-            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "title", [], "any", false, false, false, 37), "html", null, true);
+            // line 44
+            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "title", [], "any", false, false, false, 44), "html", null, true);
             echo "</h2>
                         <div class=\"posts__author-date-container\">
                             ";
-            // line 39
-            $context["author"] = twig_get_attribute($this->env, $this->source, $context["post"], "author", [], "any", false, false, false, 39);
-            // line 40
+            // line 46
+            $context["author"] = twig_get_attribute($this->env, $this->source, $context["post"], "author", [], "any", false, false, false, 46);
+            // line 47
             echo "                            <div class=\"posts__author\">";
-            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["author"] ?? null), "name", [], "any", false, false, false, 40), "html", null, true);
+            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["author"] ?? null), "name", [], "any", false, false, false, 47), "html", null, true);
             echo "</div>
                             <div class=\"posts__date\">";
-            // line 41
-            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "created_at", [], "any", false, false, false, 41), "html", null, true);
+            // line 48
+            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "created_at", [], "any", false, false, false, 48), "html", null, true);
             echo "</div>
                         </div>
 
                         <div class=\"posts__text\">
                             <p>";
-            // line 45
-            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "text", [], "any", false, false, false, 45), "html", null, true);
+            // line 52
+            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "text", [], "any", false, false, false, 52), "html", null, true);
             echo "</p>
                         </div>
                         ";
-            // line 47
-            if ((twig_get_attribute($this->env, $this->source, ($context["user"] ?? null), "isAdmin", [], "method", false, false, false, 47) == true)) {
-                // line 48
+            // line 54
+            if ((twig_get_attribute($this->env, $this->source, ($context["user"] ?? null), "isAdmin", [], "method", false, false, false, 54) == true)) {
+                // line 55
                 echo "                        <a href=\"/admin/deletePost/?id=";
-                echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "id", [], "any", false, false, false, 48), "html", null, true);
+                echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, $context["post"], "id", [], "any", false, false, false, 55), "html", null, true);
                 echo "\" class=\"btn btn--regular btn--white\">Удалить пост</a>
                         ";
             }
-            // line 50
+            // line 57
             echo "                    </div>
                 </li>
                 ";
             $context['_iterated'] = true;
         }
         if (!$context['_iterated']) {
-            // line 53
+            // line 60
             echo "                    Постов пока нет
                 ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['post'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 55
+        // line 62
         echo "            </ul>
         </div>
         <section class=\"inner-section\">
@@ -178,7 +190,7 @@ class __TwigTemplate_989502faf0b8a900276561fe4a5fe0c4c77e66222bf5e5a4a49972a95d4
 
     public function getDebugInfo()
     {
-        return array (  138 => 55,  131 => 53,  124 => 50,  118 => 48,  116 => 47,  111 => 45,  104 => 41,  99 => 40,  97 => 39,  92 => 37,  89 => 36,  83 => 33,  80 => 32,  78 => 31,  75 => 30,  70 => 29,  55 => 17,  37 => 1,);
+        return array (  150 => 62,  143 => 60,  136 => 57,  130 => 55,  128 => 54,  123 => 52,  116 => 48,  111 => 47,  109 => 46,  104 => 44,  101 => 43,  95 => 40,  92 => 39,  90 => 38,  87 => 37,  82 => 36,  69 => 25,  63 => 21,  61 => 20,  56 => 18,  37 => 1,);
     }
 
     public function getSourceContext()

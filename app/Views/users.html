@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Yet Another Interesting Blog | Welcome</title>
+</head>
+
+<body>
+<div class="wrapper">
+    <section class="top-line">
+        <div class="container top-line__container">
+            <header class="header">
+                <div class="header__col--align--right text-grey">
+                    <div class="header__menu-item">
+                        Вы вошли как&nbsp;<b>{{user.name}}</b>&nbsp;&nbsp;::&nbsp;&nbsp;<a href="/logout">Выйти</a>
+                    </div>
+                    <div class="header__menu-item">
+                        <a href="/admin/users">Администрирование</a>
+                    </div>
+                    <div class="header__menu-item">
+                        <a href="/">На главную</a>
+                    </div>
+                </div>
+            </header>
+            <div class="top-line__title">
+                <h1 class="main-title">Yet Another Interesting Blog</h1>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <ul class="users">
+                <li class="users__item">
+                    <div class="users__col text-bold">
+                        User ID
+                    </div>
+                    <div class="users__col text-bold">
+                        Name
+                    </div>
+                    <div class="users__col text-bold">
+                        Email
+                    </div>
+                    <div class="users__col text-bold">
+                        Registered at
+                    </div>
+                    <div class="users__col text-bold">
+                        Actions
+                    </div>
+                </li>
+                {% for user in users %}
+                <li class="users__item">
+                    <div class="users__col">
+                        {{user.id}}
+                    </div>
+                    <div class="users__col">
+                        {{user.name}}
+                    </div>
+                    <div class="users__col">
+                        {{user.email}}
+                    </div>
+                    <div class="users__col">
+                        {{user.registered_at}}
+                    </div>
+                    <div class="users__col">
+                        <a href="/admin/deleteUser/?user_id={{user.id}}" class="btn btn--small btn--white btns--margin">Delete user</a>
+                        <a href="/admin/deleteUserPosts/?user_id={{user.id}}" class="btn btn--small btn--white btns--margin">Delete posts</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+</body>
+</html>
