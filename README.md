@@ -8,3 +8,7 @@ mvc.week3 on Eloquent
 2. Rename /base/config_default.php to config.php and set up your data;
 3. Import database from /sql directory;
 4. Enjoy your blog ;)
+
+## JSON API method
+
+use the '/api/getuserposts?user_id=[id]' link to reach posts of user [id]
