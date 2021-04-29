@@ -7,6 +7,6 @@
     "twig/twig": "^2.0",
     "swiftmailer/swiftmailer": "^6.0",
     "intervention/image": "^2.5",
-    "illuminate/database": "^5.8"
+    "illuminate/database": "^6.20"
   }
 }
